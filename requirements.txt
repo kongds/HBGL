@@ -1,0 +1,7 @@
+numpy
+boto3
+requests
+tqdm
+wandb
+sentencepiece
+transformers==2.10.0
