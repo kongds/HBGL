@@ -1,8 +1,18 @@
 #!/usr/bin/env bash
+if [ ! -f  ./data/rcv1/rcv1_train_all.json ] || [ ! -f  ./data/rcv1/rcv1_val_all.json ] || [ ! -f  ./data/rcv1/rcv1_test_all.json ] ; then
+  echo "Please preprocess dataset first"
+  exit 0
+fi
+
 seed=42
-TRAIN_FILE=./data/rcv1/rcv1_train_all_generated.json
 OUTPUT_DIR=models/rcv1
 CACHE_DIR=.cache
+TRAIN_FILE=./data/rcv1/rcv1_train_all_generated_tl.json
+
+if [ ! -f $TRAIN_FILE ]; then
+  python preprocess.py  rcv1
+fi
+
 CUDA_VISIBLE_DEVICES=0 python run.py \
   --train_file ${TRAIN_FILE} --output_dir ${OUTPUT_DIR} \
   --model_type bert --model_name_or_path bert-base-uncased \

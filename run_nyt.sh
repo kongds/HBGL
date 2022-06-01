@@ -1,8 +1,18 @@
 #!/usr/bin/env bash
+if [ ! -f  ./data/nyt/nyt_train_all.json ] || [ ! -f  ./data/nyt/nyt_val_all.json ] || [ ! -f  ./data/nyt/nyt_test_all.json ] ; then
+  echo "Please preprocess dataset first"
+  exit 0
+fi
+
 seed=42
 OUTPUT_DIR=models/nyt
 CACHE_DIR=.cache
 TRAIN_FILE=./data/nyt/nyt_train_all_generated_tl.json
+
+if [ ! -f $TRAIN_FILE ]; then
+  python preprocess.py nyt
+fi
+
 CUDA_VISIBLE_DEVICES=0 python run.py \
   --train_file ${TRAIN_FILE} --output_dir ${OUTPUT_DIR} \
   --model_type bert --model_name_or_path bert-base-uncased \

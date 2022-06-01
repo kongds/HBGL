@@ -1,8 +1,18 @@
 #!/usr/bin/env bash
+if [ ! -f  ./data/WebOfScience/wos_train.json ] || [ ! -f  ./data/WebOfScience/wos_val.json ] || [ ! -f  ./data/WebOfScience/wos_test.json ] ; then
+  echo "Please preprocess dataset first"
+  exit 0
+fi
+
 seed=42
 OUTPUT_DIR=models/wos
 CACHE_DIR=.cache
 TRAIN_FILE=./data/WebOfScience/wos_train_generated_tl.json
+
+if [ ! -f $TRAIN_FILE ]; then
+  python preprocess.py wos
+fi
+
 CUDA_VISIBLE_DEVICES=0 python run.py\
     --train_file ${TRAIN_FILE} --output_dir ${OUTPUT_DIR}\
     --model_type bert --model_name_or_path bert-base-uncased --do_lower_case --max_source_seq_length 509 --max_target_seq_length 3\
