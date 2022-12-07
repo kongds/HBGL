@@ -1,19 +1,29 @@
 #!/usr/bin/env bash
+RUN_NAME=$1
+if [ -z "$RUN_NAME" ]; then
+  RUN_NAME=nyt
+fi
+
 if [ ! -f  ./data/nyt/nyt_train_all.json ] || [ ! -f  ./data/nyt/nyt_val_all.json ] || [ ! -f  ./data/nyt/nyt_test_all.json ] ; then
   echo "Please preprocess dataset first"
   exit 0
 fi
 
 seed=42
-OUTPUT_DIR=models/nyt
+OUTPUT_DIR=models/$RUN_NAME
 CACHE_DIR=.cache
 TRAIN_FILE=./data/nyt/nyt_train_all_generated_tl.json
+
+if [ -d $OUTPUT_DIR ]; then
+  echo  "Output path: $OUTPUT_DIR already exists, please remove it first or set RUN_NAME "
+  exit 0
+fi
 
 if [ ! -f $TRAIN_FILE ]; then
   python preprocess.py nyt
 fi
 
-CUDA_VISIBLE_DEVICES=0 python run.py \
+python run.py \
   --train_file ${TRAIN_FILE} --output_dir ${OUTPUT_DIR} \
   --model_type bert --model_name_or_path bert-base-uncased \
   --do_lower_case --max_source_seq_length 472 --max_target_seq_length 9 \
