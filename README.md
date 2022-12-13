@@ -9,9 +9,9 @@ Please download the origin datasets and pre-process them using the code in the c
 
 + [WoS](https://github.com/kk7nc/HDLTex) : `cd data/WebOfScience/ & python preprocess_wos.py`
 + [NYT](https://catalog.ldc.upenn.edu/LDC2008T19): `cd data/nyt/ &  python preprocess_nyt.py`
-+ [RCV1-V2](https://github.com/ductri/reuters_loader): `cd data/rcv1/ & python preprocess_rcv1.py & python data_rcv1.py`
++ [RCV1-V2](https://github.com/ductri/reuters_loader): `cd data/rcv1/ & python preprocess_rcv1.py . & python data_rcv1.py`
 
-## Train
+## Train & Evaluation
 
 ``` shell
 bash run_rcv1.sh
